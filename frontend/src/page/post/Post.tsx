@@ -7,11 +7,10 @@ import {
   Card,
   ListGroup,
   InputGroup,
-  Spinner,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useCont } from "../../context/context";
+import { useCont } from "../../Context/Context";
 import {
   createPost,
   getAllPosts,
@@ -68,22 +67,21 @@ export default function Post() {
 
   const fetchPosts = async () => {
     try {
-
-      if(showMyPosts){
+      if (showMyPosts) {
         const data = await getUserPosts();
         if (data.success) {
           setPosts(data.posts);
         } else {
           toast.error(data.message);
         }
-      }else{
-      const data = await getAllPosts();
-      if (data.success) {
-        setPosts(data.posts);
       } else {
-        toast.error(data.message);
+        const data = await getAllPosts();
+        if (data.success) {
+          setPosts(data.posts);
+        } else {
+          toast.error(data.message);
+        }
       }
-    }
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
@@ -225,10 +223,14 @@ export default function Post() {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-<div className="w-50 mx-auto">
-      <Button className="mb-4 w-100" onClick={() =>(setShowMyPosts(!showMyPosts),fetchPosts())}>
-           show My Posts</Button>  
-</div>
+      <div className="w-50 mx-auto">
+        <Button
+          className="mb-4 w-100"
+          onClick={() => (setShowMyPosts(!showMyPosts), fetchPosts())}
+        >
+          show My Posts
+        </Button>
+      </div>
 
       <div className="d-flex flex-column gap-3 w-50 mx-auto">
         {posts.map((post) => {
@@ -236,79 +238,78 @@ export default function Post() {
             <Card key={post._id} className="shadow-sm">
               <Card.Body>
                 <div className="d-flex justify-content-between">
-                    <Card.Title>{post.user?.name || "Unknown User"}</Card.Title>
-                    <small className="text-muted">
-                      {new Date(Date.now()).toDateString()}
-                    </small>{" "}
-                    {/* Use actual date if available */}
-                  </div>
+                  <Card.Title>{post.user?.name || "Unknown User"}</Card.Title>
+                  <small className="text-muted">
+                    {new Date(Date.now()).toDateString()}
+                  </small>{" "}
+                  {/* Use actual date if available */}
+                </div>
 
-                  <Card.Text>{post.post}</Card.Text>
-                  {post.image && (
-                    <Card.Img
-                      variant="top"
-                      src={post.image}
-                      className="mb-3"
-                      style={{ maxHeight: "300px", objectFit: "cover" }}
-                    />
-                  )}
+                <Card.Text>{post.post}</Card.Text>
+                {post.image && (
+                  <Card.Img
+                    variant="top"
+                    src={post.image}
+                    className="mb-3"
+                    style={{ maxHeight: "300px", objectFit: "cover" }}
+                  />
+                )}
 
-                  <div className="d-flex gap-3 align-items-center">
-                    <Button
-                      variant="link"
-                      className="text-decoration-none p-0"
-                      onClick={() => handleLike(post._id)}
-                    >
-                      {/* Note: In a real app we need to check if current user liked the post to toggle icon filled/outlined. 
+                <div className="d-flex gap-3 align-items-center">
+                  <Button
+                    variant="link"
+                    className="text-decoration-none p-0"
+                    onClick={() => handleLike(post._id)}
+                  >
+                    {/* Note: In a real app we need to check if current user liked the post to toggle icon filled/outlined. 
                                  Backend schema shows likes is array of user IDs. 
                              */}
-                      <FaHeart color="red" /> {post.likes.length} Likes
-                    </Button>
+                    <FaHeart color="red" /> {post.likes.length} Likes
+                  </Button>
+                  <Button
+                    variant="link"
+                    className="text-decoration-none p-0"
+                    onClick={() => toggleComments(post._id)}
+                  >
+                    <FaComment /> Comments
+                  </Button>
+                </div>
+              </Card.Body>
+              {visibleComments[post._id] && (
+                <Card.Footer>
+                  <ListGroup variant="flush" className="mb-3">
+                    {postComments[post._id]?.map((comment) => (
+                      <ListGroup.Item key={comment._id}>
+                        <strong>{comment.user?.name}: </strong> {comment.text}
+                      </ListGroup.Item>
+                    ))}
+                    {(!postComments[post._id] ||
+                      postComments[post._id].length === 0) && (
+                      <p className="text-center text-muted mt-2">
+                        No comments yet
+                      </p>
+                    )}
+                  </ListGroup>
+                  <InputGroup>
+                    <Form.Control
+                      placeholder="Add a comment..."
+                      value={commentText[post._id] || ""}
+                      onChange={(e) =>
+                        handleCommentChange(post._id, e.target.value)
+                      }
+                    />
                     <Button
-                      variant="link"
-                      className="text-decoration-none p-0"
-                      onClick={() => toggleComments(post._id)}
+                      variant="outline-primary"
+                      onClick={() => submitComment(post._id)}
                     >
-                      <FaComment /> Comments
+                      Send
                     </Button>
-                  </div>
-                </Card.Body>
-                {visibleComments[post._id] && (
-                  <Card.Footer>
-                    <ListGroup variant="flush" className="mb-3">
-                      {postComments[post._id]?.map((comment) => (
-                        <ListGroup.Item key={comment._id}>
-                          <strong>{comment.user?.name}: </strong> {comment.text}
-                        </ListGroup.Item>
-                      ))}
-                      {(!postComments[post._id] ||
-                        postComments[post._id].length === 0) && (
-                        <p className="text-center text-muted mt-2">
-                          No comments yet
-                        </p>
-                      )}
-                    </ListGroup>
-                    <InputGroup>
-                      <Form.Control
-                        placeholder="Add a comment..."
-                        value={commentText[post._id] || ""}
-                        onChange={(e) =>
-                          handleCommentChange(post._id, e.target.value)
-                        }
-                      />
-                      <Button
-                        variant="outline-primary"
-                        onClick={() => submitComment(post._id)}
-                      >
-                        Send
-                      </Button>
-                    </InputGroup>
-                  </Card.Footer>
-                )}
-              </Card>
-            );
-          })
-        }
+                  </InputGroup>
+                </Card.Footer>
+              )}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

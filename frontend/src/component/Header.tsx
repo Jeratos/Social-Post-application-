@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Container, Button } from "react-bootstrap";
-import { useCont } from "../context/context";
+import { useCont } from "../Context/Context";
 
 export default function Header() {
   const { isLogin } = useCont();
@@ -28,19 +28,11 @@ export default function Header() {
         </Navbar.Brand>
 
         {isLogin ? (
-          <Button
-            as={Link}
-            to="/logout"
-            variant="primary"
-          >
+          <Button as={Link} to="/logout" variant="primary">
             Logout
           </Button>
         ) : (
-          <Button
-            as={Link}
-            to="/login"
-            variant="primary"
-          >
+          <Button as={Link} to="/login" variant="primary">
             Login
           </Button>
         )}

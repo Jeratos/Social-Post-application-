@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCont } from "../context/context";
+import { useCont } from "../Context/Context";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -8,15 +8,19 @@ import {
   Card,
   Form,
   Button,
-  InputGroup
+  InputGroup,
 } from "react-bootstrap";
 
 export default function login() {
   const { login, register } = useCont();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ name:"",email: "", password: "" });
-  const [registerForm, setRegisterForm] = useState({ name:"",email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [registerForm, setRegisterForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const [show, setShow] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
@@ -35,15 +39,19 @@ export default function login() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const res = await register(registerForm.name ,registerForm.email, registerForm.password);
+    const res = await register(
+      registerForm.name,
+      registerForm.email,
+      registerForm.password,
+    );
     if (res) {
       setIsRegister(false);
-      setRegisterForm({ name:"",email: "", password: "" });
+      setRegisterForm({ name: "", email: "", password: "" });
     }
   };
 
   return (
-     <Container
+    <Container
       fluid
       className="vh-100 d-flex align-items-center justify-content-center bg-light"
     >
@@ -56,7 +64,6 @@ export default function login() {
               </h3>
 
               <Form onSubmit={isRegister ? handleRegister : handleLogin}>
-
                 {/* Name (Register only) */}
                 {isRegister && (
                   <Form.Group className="mb-3">
@@ -80,9 +87,7 @@ export default function login() {
                     name="email"
                     placeholder="Enter email"
                     value={isRegister ? registerForm.email : form.email}
-                    onChange={
-                      isRegister ? handleRegisterChange : handleChange
-                    }
+                    onChange={isRegister ? handleRegisterChange : handleChange}
                     required
                   />
                 </Form.Group>
@@ -95,9 +100,7 @@ export default function login() {
                       type={show ? "text" : "password"}
                       name="password"
                       placeholder="Enter password"
-                      value={
-                        isRegister ? registerForm.password : form.password
-                      }
+                      value={isRegister ? registerForm.password : form.password}
                       onChange={
                         isRegister ? handleRegisterChange : handleChange
                       }
