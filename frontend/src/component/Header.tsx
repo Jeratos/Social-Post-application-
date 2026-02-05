@@ -1,7 +1,6 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Container, Button } from "react-bootstrap";
-import { useCont } from "../Context/Context";
+import { useCont } from "../context/Context";
 
 export default function Header() {
   const { isLogin } = useCont();

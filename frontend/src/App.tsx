@@ -5,8 +5,8 @@ import Logout from "./component/Logout";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ContextProvider } from "./Context/Context";
-import ProtectRoute from "./utils/protectedRoute";
+import { ContextProvider } from "./context/Context";
+import ProtectRoute from "./utils/ProtectedRoute";
 
 function App() {
   return (

@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useCont } from "../../Context/Context";
+import { useCont } from "../../context/Context";
 import {
   createPost,
   getAllPosts,
@@ -18,7 +18,7 @@ import {
   likePost,
   postComment,
   getUserPosts,
-} from "../../service/postService";
+} from "../../service/PostService";
 import { FaHeart, FaComment } from "react-icons/fa";
 
 interface User {

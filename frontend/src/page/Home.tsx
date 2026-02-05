@@ -1,5 +1,3 @@
-import React from "react";
-import { useCont } from "../Context/Context";
 import { Container } from "react-bootstrap";
 import Post from "./post/Post";
 
