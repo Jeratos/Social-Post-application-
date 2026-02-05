@@ -27,12 +27,12 @@ export default function Header() {
         </Navbar.Brand>
 
         {isLogin ? (
-          <Button as={Link} to="/logout" variant="primary">
-            Logout
+          <Button variant="primary">
+            <Link to="/logout" className="nav-link" style={{ color: "white" }}>Logout</Link>
           </Button>
         ) : (
-          <Button as={Link} to="/login" variant="primary">
-            Login
+          <Button variant="primary">
+           <Link to="/login" className="nav-link" style={{ color: "white" }}>Login</Link>
           </Button>
         )}
       </Container>

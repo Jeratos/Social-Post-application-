@@ -52,7 +52,7 @@ export default function Post() {
     image: null,
   });
   const [posts, setPosts] = useState<PostData[]>([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [commentText, setCommentText] = useState<{ [key: string]: string }>({});
   const [visibleComments, setVisibleComments] = useState<{
     [key: string]: boolean;

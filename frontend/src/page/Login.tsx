@@ -25,19 +25,19 @@ export default function login() {
   const [show, setShow] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
 
-  const handleChange = (e) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleRegisterChange = (e) =>
+  const handleRegisterChange = (e:React.ChangeEvent<HTMLInputElement>)=>
     setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await login(form.email, form.password);
     if (res) navigate("/");
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await register(
       registerForm.name,
