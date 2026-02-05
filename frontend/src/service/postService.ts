@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://social-post-application-za6b.onrender.com";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("Token");

@@ -43,7 +43,7 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
 
   async function login(email: string, password: string) {
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("https://social-post-application-za6b.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const ContextProvider: React.FC<ContextProviderProps> = ({
 
   async function register(name: string, email: string, password: string) {
     try {
-      const res = await fetch("http://localhost:5000/register", {
+      const res = await fetch("https://social-post-application-za6b.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
