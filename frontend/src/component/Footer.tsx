@@ -7,7 +7,7 @@ export default function Footer() {
         <Row className="text-center">
           <Col>
             <p className="mb-2 small">
-              &copy; {new Date().getFullYear()} Task Management. All rights reserved.
+              &copy; {new Date().getFullYear()} Social Post Application. All rights reserved.
             </p>
 
             <div className="d-flex justify-content-center gap-4 small">
