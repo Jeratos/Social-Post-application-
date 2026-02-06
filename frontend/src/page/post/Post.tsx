@@ -73,6 +73,7 @@ export default function Post() {
           setPosts(data.posts);
         } else {
           toast.error(data.message);
+          LogoutUser();
         }
       } else {
         const data = await getAllPosts();
@@ -80,10 +81,12 @@ export default function Post() {
           setPosts(data.posts);
         } else {
           toast.error(data.message);
+          LogoutUser();
         }
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
+      LogoutUser();
     }
   };
 
@@ -184,133 +187,163 @@ export default function Post() {
   };
 
   return (
-    <div className="container mt-4">
-      <Accordion className="mb-4 w-50 mx-auto">
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Send your post</Accordion.Header>
-          <Accordion.Body>
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="d-flex flex-column gap-2">
+  <div className="container my-4 ">
+    {/* Create Post */}
+    <Accordion className=" col-12 col-md-10 col-lg-8 mx-auto">
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>✍️ Create a Post</Accordion.Header>
+        <Accordion.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="d-flex flex-column gap-3">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={form.post}
+                onChange={handleChange}
+                name="post"
+                placeholder="What's on your mind?"
+              />
+
+              <div className="d-flex flex-wrap gap-2">
+                <Button
+                  variant="outline-primary"
+                  onClick={() => fileRef.current?.click()}
+                >
+                  📷 Upload Image
+                </Button>
+
                 <Form.Control
-                  as="textarea"
-                  rows={3}
-                  value={form.post}
+                  type="file"
+                  name="image"
+                  accept="image/*"
                   onChange={handleChange}
-                  name="post"
-                  placeholder="Enter your post"
+                  ref={fileRef}
+                  className="d-none"
                 />
-                <div className="d-flex gap-2">
-                  <Button
-                    variant="outline-secondary"
-                    onClick={() => fileRef.current?.click()}
-                  >
-                    Upload Image
-                  </Button>
-                  <Form.Control
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleChange}
-                    ref={fileRef}
-                    style={{ display: "none" }}
-                  />
-                </div>
-                {form.image && <span>{form.image.name}</span>}
+              </div>
 
-                <Button type="submit">Post</Button>
-              </Form.Group>
-            </Form>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-      <div className="w-50 mx-auto">
-        <Button
-          className="mb-4 w-100"
-          onClick={() => (setShowMyPosts(!showMyPosts), fetchPosts())}
-        >
-          show My Posts
-        </Button>
-      </div>
-
-      <div className="d-flex flex-column gap-3 w-50 mx-auto">
-        {posts.map((post) => {
-          return (
-            <Card key={post._id} className="shadow-sm">
-              <Card.Body>
-                <div className="d-flex justify-content-between">
-                  <Card.Title>{post.user?.name || "Unknown User"}</Card.Title>
-                  <small className="text-muted">
-                    {new Date(Date.now()).toDateString()}
-                  </small>{" "}
-                  {/* Use actual date if available */}
-                </div>
-
-                <Card.Text>{post.post}</Card.Text>
-                {post.image && (
-                  <Card.Img
-                    variant="top"
-                    src={post.image}
-                    className="mb-3"
-                    style={{ maxHeight: "300px", objectFit: "cover" }}
-                  />
-                )}
-
-                <div className="d-flex gap-3 align-items-center">
-                  <Button
-                    variant="link"
-                    className="text-decoration-none p-0"
-                    onClick={() => handleLike(post._id)}
-                  >
-                    {/* Note: In a real app we need to check if current user liked the post to toggle icon filled/outlined. 
-                                 Backend schema shows likes is array of user IDs. 
-                             */}
-                    <FaHeart color="red" /> {post.likes.length} Likes
-                  </Button>
-                  <Button
-                    variant="link"
-                    className="text-decoration-none p-0"
-                    onClick={() => toggleComments(post._id)}
-                  >
-                    <FaComment /> Comments
-                  </Button>
-                </div>
-              </Card.Body>
-              {visibleComments[post._id] && (
-                <Card.Footer>
-                  <ListGroup variant="flush" className="mb-3">
-                    {postComments[post._id]?.map((comment) => (
-                      <ListGroup.Item key={comment._id}>
-                        <strong>{comment.user?.name}: </strong> {comment.text}
-                      </ListGroup.Item>
-                    ))}
-                    {(!postComments[post._id] ||
-                      postComments[post._id].length === 0) && (
-                      <p className="text-center text-muted mt-2">
-                        No comments yet
-                      </p>
-                    )}
-                  </ListGroup>
-                  <InputGroup>
-                    <Form.Control
-                      placeholder="Add a comment..."
-                      value={commentText[post._id] || ""}
-                      onChange={(e) =>
-                        handleCommentChange(post._id, e.target.value)
-                      }
-                    />
-                    <Button
-                      variant="outline-primary"
-                      onClick={() => submitComment(post._id)}
-                    >
-                      Send
-                    </Button>
-                  </InputGroup>
-                </Card.Footer>
+              {form.image && (
+                <small className="text-warning fw-semibold">
+                  Selected: {form.image.name}
+                </small>
               )}
-            </Card>
-          );
-        })}
-      </div>
+
+              <Button
+                type="submit"
+                style={{ backgroundColor: "#0d6efd", border: "none" }}
+              >
+                🚀 Post
+              </Button>
+            </Form.Group>
+          </Form>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+
+    {/* Toggle My Posts */}
+    <div className="col-12 col-md-10 col-lg-8 mx-auto mb-4">
+      <Button
+        className="w-100"
+        style={{ backgroundColor: "#ffc107", color: "#000", border: "none" }}
+        onClick={() => {
+          setShowMyPosts(!showMyPosts);
+          fetchPosts();
+        }}
+      >
+        {showMyPosts ? "Show All Posts" : "Show My Posts"}
+      </Button>
     </div>
-  );
+
+    {/* Posts */}
+    <div className="d-flex flex-column gap-4 col-12 col-md-10 col-lg-8 mx-auto">
+      {posts.map((post) => (
+        <Card key={post._id} className="shadow-sm border-0">
+          <Card.Body>
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <Card.Title className="mb-0 text-primary">
+                {post.user?.name || "Unknown User"}
+              </Card.Title>
+              <small className="text-muted">
+                {new Date().toDateString()}
+              </small>
+            </div>
+
+            <Card.Text>{post.post}</Card.Text>
+
+            {post.image && (
+              <Card.Img
+                src={post.image}
+                className="mb-3 rounded"
+                style={{
+                  maxHeight: "320px",
+                  objectFit: "cover",
+                  width: "100%",
+                }}
+              />
+            )}
+
+            <div className="d-flex gap-4">
+              <Button
+                variant="link"
+                className="p-0 text-danger fw-semibold"
+                onClick={() => handleLike(post._id)}
+              >
+                <FaHeart /> {post.likes.length}
+              </Button>
+
+              <Button
+                variant="link"
+                className="p-0 text-primary fw-semibold"
+                onClick={() => toggleComments(post._id)}
+              >
+                <FaComment /> Comments
+              </Button>
+            </div>
+          </Card.Body>
+
+          {visibleComments[post._id] && (
+            <Card.Footer className="bg-light">
+              <ListGroup variant="flush" className="mb-3">
+                {postComments[post._id]?.length ? (
+                  postComments[post._id].map((comment) => (
+                    <ListGroup.Item key={comment._id}>
+                      <strong className="text-primary">
+                        {comment.user?.name}:
+                      </strong>{" "}
+                      {comment.text}
+                    </ListGroup.Item>
+                  ))
+                ) : (
+                  <p className="text-center text-muted m-0">
+                    No comments yet
+                  </p>
+                )}
+              </ListGroup>
+
+              <InputGroup>
+                <Form.Control
+                  placeholder="Write a comment..."
+                  value={commentText[post._id] || ""}
+                  onChange={(e) =>
+                    handleCommentChange(post._id, e.target.value)
+                  }
+                />
+                <Button
+                  style={{
+                    backgroundColor: "#0d6efd",
+                    border: "none",
+                  }}
+                  onClick={() => submitComment(post._id)}
+                >
+                  Send
+                </Button>
+              </InputGroup>
+            </Card.Footer>
+          )}
+        </Card>
+      ))}
+    </div>
+  </div>
+);
+
 }
