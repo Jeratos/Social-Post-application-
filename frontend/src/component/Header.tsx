@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, Container, Button } from "react-bootstrap";
-import { useCont } from "../context/Context";
+import { useCont } from "../context/context";
 
 export default function Header() {
   const { isLogin } = useCont();
@@ -28,11 +28,15 @@ export default function Header() {
 
         {isLogin ? (
           <Button variant="primary">
-            <Link to="/logout" className="nav-link" style={{ color: "white" }}>Logout</Link>
+            <Link to="/logout" className="nav-link" style={{ color: "white" }}>
+              Logout
+            </Link>
           </Button>
         ) : (
           <Button variant="primary">
-           <Link to="/login" className="nav-link" style={{ color: "white" }}>Login</Link>
+            <Link to="/login" className="nav-link" style={{ color: "white" }}>
+              Login
+            </Link>
           </Button>
         )}
       </Container>

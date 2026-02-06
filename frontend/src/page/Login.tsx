@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCont } from "../context/Context";
+import { useCont } from "../context/context";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -28,7 +28,7 @@ export default function login() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleRegisterChange = (e:React.ChangeEvent<HTMLInputElement>)=>
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setRegisterForm({ ...registerForm, [e.target.name]: e.target.value });
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

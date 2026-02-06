@@ -5,7 +5,7 @@ import Logout from "./component/Logout";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ContextProvider } from "./context/Context";
+import { ContextProvider } from "./context/context";
 import ProtectRoute from "./utils/ProtectedRoute";
 
 function App() {
